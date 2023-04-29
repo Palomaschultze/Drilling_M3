@@ -35,13 +35,11 @@ class Gastos {
     }
 }
 
-
-
 //Funcion capturar presupuesto 
 const capturar = () => {
-    $('#presupuesto').text($('#ingresaPresupuesto').val());
-    $('#saldo').text($("#ingresaPresupuesto").val());
-    let presupuesto = $("#ingresaPresupuesto").val();
+    let presupuesto = parseFloat($("#ingresaPresupuesto").val());
+    $('#presupuesto').text(presupuesto.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' }));
+    $('#saldo').text(presupuesto.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' }));
     return presupuesto;
 }
 
@@ -60,7 +58,7 @@ const insertarDatos = (gasto) => {
     $('#tbody').append(
         `<tr>
             <td>${gasto.nombre}</td>
-            <td>${gasto.monto}</td>
+            <td>${parseInt(gasto.monto).toLocaleString('es-CL', { style: 'currency', currency: 'CLP' })}</td>
             <td class="d-none">${gasto.id}</td>
             <td id="basurero"><img src="./assets/img/Basurero.png" width="15px"></td>
         </tr>`
@@ -77,8 +75,12 @@ const sumarGastos = (presupuesto) => { //la declaramos en btn añadir gastos
             return parseInt(a) + parseInt(b);
         })
     })
-    $("#gastos").text(total);
-    $("#saldo").text(parseInt(presupuesto) - total);
+    $("#gastos").text(total.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' }));
+    if (total <= parseInt(presupuesto)) {
+        $("#saldo").text((presupuesto - total).toLocaleString('es-CL', { style: 'currency', currency: 'CLP' }));
+    } else {
+        alert("El total de gastos no puede ser mayor al presupuesto");
+    }
 }
 
 //Función borrar elemento
@@ -98,9 +100,9 @@ const eliminar = (producto) => {
             return parseInt(a) + parseInt(b);
         })
     })
-    $('#gastos').text(total)
+    $('#gastos').text((parseInt(total)).toLocaleString('es-CL', { style: 'currency', currency: 'CLP' }))
     if (total >= 0) {
-        $('#saldo').text(parseInt(presupuesto) - total)
+        $('#saldo').text((parseInt(presupuesto) - total).toLocaleString('es-CL', { style: 'currency', currency: 'CLP' }))
     } else {
         $("#gastos").text(0)
         $("#saldo").text($("#presupuesto").text())
